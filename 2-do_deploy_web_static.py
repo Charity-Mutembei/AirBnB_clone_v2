@@ -10,6 +10,7 @@ import os
 env.hosts = ["100.25.180.249", "54.196.30.13"]
 env.user = "ubuntu"
 
+
 def do_pack():
     """
     Compresses the contents of the web_static folder into a .tgz archive.
@@ -36,6 +37,7 @@ def do_pack():
     except Exception:
         return None
 
+
 def do_deploy(archive_path):
     """
     Distribute an archive to web servers
@@ -60,7 +62,12 @@ def do_deploy(archive_path):
         run("mkdir -p {}{}/".format(remote_release_path, archive_folder_name))
 
         # Uncompress the archive to the folder on the web servers
-        run("tar -xzf {}{} -C {}{}/".format(remote_tmp_path, archive_name, remote_release_path, archive_folder_name))
+        run("tar -xzf {}{} -C {}{}/".format(
+            remote_tmp_path,
+            archive_name,
+            remote_release_path,
+            archive_folder_name
+            ))
 
         # Delete the archive from the web servers
         run("rm -f {}{}".format(remote_tmp_path, archive_name))
@@ -69,7 +76,10 @@ def do_deploy(archive_path):
         run("rm -f /data/web_static/current")
 
         # Create a new symbolic link linked to the new version
-        run("ln -s {}{}/ /data/web_static/current".format(remote_release_path, archive_folder_name))
+        run("ln -s {}{}/ /data/web_static/current".format(
+            remote_release_path,
+            archive_folder_name
+            ))
 
         return True
 
