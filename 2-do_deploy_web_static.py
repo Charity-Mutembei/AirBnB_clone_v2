@@ -53,7 +53,8 @@ def do_deploy(archive_path):
         folder_name = "/data/web_static/releases/{}".format(
             archive_filename[:-4])
         run("sudo mkdir -p {}".format(folder_name))
-        run(" sudo tar -xzf /tmp/{} -C {}".format(archive_filename, folder_name))
+        run(" sudo tar -xzf /tmp/{} -C {}".format(
+            archive_filename, folder_name))
 
         # Delete the uploaded archive from /tmp/
         run(" sudo rm /tmp/{}".format(archive_filename))
