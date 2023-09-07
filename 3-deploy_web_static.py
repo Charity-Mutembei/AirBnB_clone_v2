@@ -53,14 +53,15 @@ def do_deploy(archive_path):
         ))
         print("New version deployed!")
         return True
-    except:
+    except Exception:
         return False
 
 
 def deploy():
-    """dompress and send to server
     """
-    pack = do_pack()
-    if pack:
-        return do_deploy(pack)
-    return False
+    Deploy the archive to the web servers.
+    """
+    archive_path = do_pack()
+    if archive_path is None:
+        return False
+    return do_deploy(archive_path)
