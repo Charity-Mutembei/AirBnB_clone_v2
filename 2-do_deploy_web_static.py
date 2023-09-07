@@ -12,19 +12,30 @@ env.user = "ubuntu"
 
 
 def do_pack():
-    """compress webstatic in a tgz
-    the tgz created will be put in folder versions
     """
-    if not os.path.exists("versions"):
-        local("mkdir versions")
-    now = datetime.now()
-    name = "versions/web_static_{}.tgz".format(
-        now.strftime("%Y%m%d%H%M%S")
-    )
-    cmd = "tar -cvzf {} {}".format(name, "web_static")
-    result = local(cmd)
-    if not result.failed:
-        return name
+    Compresses the contents of the web_static folder into a .tgz archive.
+    """
+    try:
+        # Create the versions directory if it doesn't exist
+        if not os.path.exists("versions"):
+            os.makedirs("versions")
+
+        # Get the current date and time
+        now = datetime.now()
+
+        # Format the date and time as a string
+        date_time_str = now.strftime("%Y%m%d%H%M%S")
+
+        # Create the archive filename
+        archive_name = "web_static_{}.tgz".format(date_time_str)
+
+        # Compress the web_static folder into the archive
+        local("tar -cvzf versions/{} web_static".format(archive_name))
+
+        # Return the archive path if successful
+        return "versions/{}".format(archive_name)
+    except Exception:
+        return None
 
 
 def do_deploy(archive_path):
@@ -41,20 +52,20 @@ def do_deploy(archive_path):
         archive_filename = os.path.basename(archive_path)
         folder_name = "/data/web_static/releases/{}".format(
             archive_filename[:-4])
-        run("mkdir -p {}".format(folder_name))
-        run("tar -xzf /tmp/{} -C {}".format(archive_filename, folder_name))
+        run("sudo mkdir -p {}".format(folder_name))
+        run(" sudo tar -xzf /tmp/{} -C {}".format(archive_filename, folder_name))
 
         # Delete the uploaded archive from /tmp/
-        run("rm /tmp/{}".format(archive_filename))
+        run(" sudo rm /tmp/{}".format(archive_filename))
 
         # Move the contents of the extracted folder to the parent directory
-        run("mv {}/web_static/* {}".format(folder_name, folder_name))
+        run("sudo mv {}/web_static/* {}".format(folder_name, folder_name))
 
         # Remove the symbolic link /data/web_static/current
-        run("rm -rf /data/web_static/current")
+        run("sudo rm -rf /data/web_static/current")
 
         # Create a new symbolic link /data/web_static/current
-        run("ln -s {} /data/web_static/current".format(folder_name))
+        run("sudo ln -s {} /data/web_static/current".format(folder_name))
 
         return True
     except Exception as e:
