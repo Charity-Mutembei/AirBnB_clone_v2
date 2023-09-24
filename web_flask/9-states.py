@@ -13,7 +13,7 @@ app = Flask(__name__)
 def states():
     states = storage.all("State")
     sorted_states = sorted(states.values(), key=lambda state: state.name)
-    return render_template('states.html', states=sorted_states)
+    return render_template('9-states.html', states=sorted_states)
 
 
 @app.route('/states/<state_id>', strict_slashes=False)
