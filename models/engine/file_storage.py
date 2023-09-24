@@ -41,7 +41,7 @@ class FileStorage:
                 if name[0] in str(cls):
                     dict[k] = v
             return dict
-    
+
     def new(self, obj):
         """sets __object to given obj
         Args:
