@@ -7,13 +7,11 @@ import models
 from os import environ as env
 
 
-
 place_amenity = Table(
     'place_amenity', Base.metadata,
     Column('place_id', String(60), ForeignKey("places.id")),
     Column('amenity_id', String(60), ForeignKey("amenities.id"))
 )
-
 
 
 class Place(BaseModel, Base):
@@ -31,7 +29,7 @@ class Place(BaseModel, Base):
         longitude: longitude in float
         amenity_ids: list of Amenity ids
     """
-    
+
     __tablename__ = "places"
     city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
