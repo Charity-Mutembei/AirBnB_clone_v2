@@ -19,8 +19,9 @@ def states():
 @app.route('/states/<state_id>', strict_slashes=False)
 def state_detail(state_id):
     state = storage.get("State", state_id)
-    cities = sorted(state.cities, key=lambda city: city.name)
-    return render_template('9-states.html', state=state, cities=cities)
+    if state:
+        cities = sorted(state.cities, key=lambda city: city.name)
+        return render_template('9-states.html', state=state, cities=cities)
 
 
 @app.teardown_appcontext
